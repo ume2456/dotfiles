@@ -1,0 +1,153 @@
+﻿" =============================================================================
+" ■Kaoriya Vim
+" undo ファイルの作成ディレクトリ指定
+:set undodir=$VIM/undo
+
+" =============================================================================
+" ■vi
+" vi互換無効
+:set nocompatible
+
+" =============================================================================
+" ■カーソル移動
+" 行をまたいでカーソルを移動
+:set whichwrap=b,s,h,l,<,>,[,],~
+" 上下8行の視界を確保
+:set scrolloff=15
+" 左右スクロール時の視界を確保
+:set sidescrolloff=16
+" 左右スクロールは一文字ずつ行う
+:set sidescroll=1
+" ビジュアルモードの矩形選択時に仮想編集出来るようにする
+:set virtualedit+=block
+
+" =============================================================================
+" ■ファイル処理
+" 保存されていないファイルがある場合は終了前に確認
+:set confirm
+" 保存されてないファイルがあるときでも別のファイルを開く
+:set hidden
+" 外部でファイルに変更がされた場合は読み直す
+:set autoread
+" ファイルを上書きする前にバックアップを作る。書き込みが成功してもバックアップはそのまま取っておく。
+:set nobackup
+" ファイルの上書きの前にバックアップを作る。
+" オプション 'backup' がオンでない限り、バックアップは上書きに成功した後削除される。
+:set writebackup
+" ファイル編集中にスワップファイルを作らない
+:set noswapfile
+
+" =============================================================================
+" ■検索
+" 検索パターンにおいて大文字と小文字を区別しない。（有効:ignorecase/無効:noignorecase）
+:set ignorecase
+" 検索パターンが大文字を含んでいたらオプション 'ignorecase' を上書きする。
+:set smartcase
+" 検索がファイル末尾まで進んだら、ファイル先頭から再び検索する。
+:set wrapscan
+" オンのとき、コマンドライン補完が拡張モードで行われる。（有効:wildmenu/無効:nowildmenu）
+:set wildmenu
+" キーワードを入力開始した時点で検索を開始する。インクリメンタルな検索。
+:set incsearch
+" 検索結果をハイライト
+:set hlsearch
+
+" =============================================================================
+" ■タブ
+" ファイル内の <Tab> が対応する空白の数。
+:set tabstop=4
+" <Tab> の挿入や <BS> の使用等の編集操作をするときに、<Tab> が対応する空白の数。
+:set softtabstop=4
+" インデントの各段階に使われる空白の数。
+:set shiftwidth=4
+" Insertモードで <Tab> を挿入するとき、代わりに適切な数の空白を使う。
+:set noexpandtab
+
+" =============================================================================
+" ■改行
+" 入力されているテキストの最大幅。行がそれより長くなると、
+" この幅を超えないように空白の後で改行される。値を 0 に設定すると無効になる。
+:set textwidth=0
+" 新しい行を開始したとき (Insertモードで <CR> を打ち込むか、コマンド 'o'や 'O' を使ったとき)、
+" 新しい行のインデントを現在行と同じくする。（有効:autoindent/無効:noautoindent）
+":set autoindent
+" Cライクなインデント
+:set cindent
+
+" オンのときは、ウィンドウの幅より長い行は折り返され、次の行に続けて表示される。
+:set wrap
+" set breakatの設定に基づいてwrapする
+:set linebreak
+" wrapで折り返された行頭に表示する
+:set showbreak=>
+" wrapで折り返された行にインデントを挿入する
+:set breakindent
+
+" =============================================================================
+" ■括弧
+" 閉じ括弧が入力されたとき、対応する開き括弧にわずかの間ジャンプする。
+:set showmatch
+" showmatchでジャンプする時間(デフォルトでは0.5sec、matchtime*0.1secジャンプする)
+:set matchtime=1
+
+" =============================================================================
+" ■ルーラー"
+" 毎行の前に行番号を表示する。（有効:number/無効:nonumber）
+:set number
+" カーソルが何行目の何列目に置かれているかを表示する。（有効:ruler/無効:noruler）
+:set ruler
+" タブ文字を CTRL-I で表示し、行末に $ で表示する。（有効:list/無効:nolist）
+:set list
+" Listモード (訳注: オプション 'list' がオンのとき) に使われる文字を設定する。
+" tab:タブ  trail:行末のスペース  eol:EndOfLine  nbsp:不可視スペースの表示
+" extends:ウィンドウ幅右に文字がある場合  precedes:ウィンドウ幅左に文字がある場合
+:set listchars=tab:>-,extends:],precedes:[,trail:-,eol:<,nbsp:-
+" カーソル行の背景色を変える"
+:set cursorline
+" カーソル列の背景色を変える"
+":set cursorcolumn"
+" 全角スペースの表示"
+function! ZenkakuSpace()
+    highlight ZenkakuSpace cterm=reverse ctermfg=DarkMagenta gui=reverse guifg=DarkMagenta
+endfunction
+
+if has('syntax')
+    augroup ZenkakuSpace
+        autocmd!
+        autocmd ColorScheme       * call ZenkakuSpace()
+        autocmd VimEnter,WinEnter * match ZenkakuSpace /　/
+    augroup END
+    call ZenkakuSpace()
+endif
+
+" =============================================================================
+" ■ステータス"
+" 最下ウィンドウにいつステータス行が表示されるかを設定する。
+"               0: 全く表示しない
+"               1: ウィンドウの数が2以上のときのみ表示
+"               2: 常に表示
+:set laststatus=2
+" コマンド (の一部) を画面の最下行に表示する。（有効:showcmd/無効:noshowcmd）
+:set showcmd
+
+" =============================================================================
+" ■動作環境
+" OSのクリップボードをレジスタ指定なしで Yank, Put 出来るようにする
+:set clipboard=unnamed,unnamedplus
+" Windowsでもパスの区切りをスラッシュにする
+:set shellslash
+" インサートモードから抜けると自動的にIMEをオフにする
+:set iminsert=2
+
+" =============================================================================
+" ■コマンドラインの設定
+" タブキーによるファイル名保管を有効にする
+:set wildmenu wildmode=list:longest,full
+" コマンドラインの履歴を一万件保持する
+:set history=10000
+
+" =============================================================================
+" ■ビープ音設定
+" ビープ音を全て無効にする
+:set visualbell t_vb=
+:set noerrorbells

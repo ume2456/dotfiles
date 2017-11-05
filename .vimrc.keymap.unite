@@ -1,0 +1,63 @@
+" =============================================================================
+" ■Key mappings for unite
+" Reference URL: http://www.karakaram.com/vimfiler
+"              : http://www.nekochango.com/entry/top/vim/tips/2_2
+"              : http://baqamore.hatenablog.com/entry/2016/02/13/062555
+
+" unite prefix key
+nnoremap [unite] <Nop>
+nmap <Leader>f [unite]
+
+" 現在開いているファイルのディレクトリ下のファイル一覧
+" 開いていない場合はカレントディレクトリ
+nnoremap <silent> [unite]f :<C-u>UniteWithBufferDir -buffer-name=files file<CR>
+" バッファ一覧
+nnoremap <silent> [unite]b :<C-u>Unite buffer<CR>
+" レジスタ一覧
+nnoremap <silent> [unite]r :<C-u>Unite -buffer-name=register register<CR>
+" 最近使用したファイル一覧
+nnoremap <silent> [unite]m :<C-u>Unite file_mru<CR>
+" ブックマーク一覧
+nnoremap <silent> [unite]c :<C-u>Unite bookmark<CR>
+" ブックマークに追加
+nnoremap <silent> [unite]a :<C-u>UniteBookmarkAdd<CR>
+"uniteを開いている間のキーマッピング
+augroup aug_unite
+	autocmd!
+	autocmd FileType unite call s:unite_my_settings()
+augroup END
+function! s:unite_my_settings()
+	"ESCでuniteを終了
+	nmap <buffer> <ESC> <Plug>(unite_exit)
+	"入力モードのときjjでノーマルモードに移動
+	imap <buffer> jj <Plug>(unite_insert_leave)
+	"入力モードのときctrl+wでバックスラッシュも削除
+	imap <buffer> <C-w> <Plug>(unite_delete_backward_path)
+	"sでsplit
+	nnoremap <silent><buffer><expr> s unite#smart_map('s', unite#do_action('split'))
+	inoremap <silent><buffer><expr> s unite#smart_map('s', unite#do_action('split'))
+	"vでvsplit
+	nnoremap <silent><buffer><expr> v unite#smart_map('v', unite#do_action('vsplit'))
+	inoremap <silent><buffer><expr> v unite#smart_map('v', unite#do_action('vsplit'))
+	"fでvimfiler
+	nnoremap <silent><buffer><expr> f unite#smart_map('f', unite#do_action('vimfiler'))
+	inoremap <silent><buffer><expr> f unite#smart_map('f', unite#do_action('vimfiler'))
+endfunction
+
+" ■vimfiler用キーマップ設定
+" 現在開いているバッファのディレクトリを開く
+nnoremap <silent> [unite]e :<C-u>VimFilerBufferDir -quit<CR>
+" 現在開いているバッファをIDE風に開く
+nnoremap <silent> [unite]i :<C-u>VimFilerBufferDir -split -simple -winwidth=35 -no-quit<CR>
+
+"デフォルトキーマッピングを変更
+augroup aug_unite
+	autocmd FileType vimfiler call s:vimfiler_my_settings()
+augroup END
+function! s:vimfiler_my_settings()
+	nnoremap <silent><buffer><expr> <C-s> vimfiler#do_switch_action('split')
+	nnoremap <silent><buffer><expr> <C-v> vimfiler#do_switch_action('vsplit')
+	nmap <buffer> q <Plug>(vimfiler_exit)
+	nmap <buffer> Q <Plug>(vimfiler_hide)
+endfunction
+

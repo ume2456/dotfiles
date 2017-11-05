@@ -1,0 +1,44 @@
+﻿" =============================================================================
+" ■neobundle.vim"
+
+" プロキシ環境用の設定ファイルを読み込む
+if filereadable($HOME . '.vimrc.local')
+  source  ~/.vimrc.local
+endif
+
+" bundleで管理するディレクトリを指定
+set runtimepath+=$HOME/vimfiles/bundle/neobundle.vim/
+
+" Required:"
+call neobundle#begin(expand($HOME . '/vimfiles/bundle/'))
+
+" neobundle自体をneobundleで管理
+NeoBundleFetch 'Shougo/neobundle.vim'
+
+" カーソル移動
+NeoBundle 'easymotion/vim-easymotion'
+" マルチカーソル
+NeoBundle 'terryma/vim-multiple-cursors'
+" 括弧を編集する
+NeoBundle 'tpope/vim-surround'
+" 閉じかっこを補完する
+NeoBundle 'cohama/lexima.vim'
+" サブモードのユーザー定義を可能にする
+NeoBundle 'kana/vim-submode'
+" Unite
+NeoBundle 'Shougo/unite.vim'
+" Vimfiler
+NeoBundle 'Shougo/vimfiler'
+" Neomru
+NeoBundle 'Shougo/neomru.vim'
+
+" ColorScheme
+NeoBundle 'tomasr/molokai'
+
+call neobundle#end()
+
+" ログ出力
+let g:neobundle#log_filename = $HOME . '/neobundle.log'
+
+" プラグインをインデントに応じて読み込み
+filetype plugin indent on
